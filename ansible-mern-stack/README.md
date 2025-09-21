@@ -146,7 +146,3 @@ ansible-playbook -i inventory/hosts main-playbook.yml --tags dbserver
 - MongoDB repository setup requires a correct codename (e.g., `jammy` for Ubuntu 22.04).
 
 ---
-
-## 📜 License
-
-MIT-0
