@@ -1,17 +1,21 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # tasks file for roles/common
+
+# === System update ===
 - name: Update all the packages to the latest
   ansible.builtin.apt:
     name: "*"
     state: latest
     update_cache: yes
 
+# === Install common packages ===
 - name: Install the common packages
   ansible.builtin.apt:
     pkg: "{{ common_packages }}"
     state: present
 
+# === Generate SSH keypairs locally ===
 - name: Generate a local keypair
   community.crypto.openssh_keypair:
     path: "{{ item.key }}"
@@ -19,12 +23,14 @@
   delegate_to: localhost
   become: false
 
+# === Manage groups ===
 - name: Add users group
   ansible.builtin.group:
     name: "{{ item.group }}"
     state: "{{ item.state }}"
   loop: "{{ users }}"
 
+# === Create users and assign them to groups ===
 - name: Add users to the group
   ansible.builtin.user:
     name: "{{ item.name }}"
@@ -33,6 +39,7 @@
     state: "{{ item.state }}"
   loop: "{{ users }}"
 
+# === Add SSH public keys for users ===
 - name: Add keys to our users
   ansible.posix.authorized_key:
     user: "{{ item.name }}"
