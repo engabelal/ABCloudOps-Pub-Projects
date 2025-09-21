@@ -17,5 +17,5 @@ It showcases practical implementations in **Infrastructure as Code (IaC)**, **co
 ## 🚀 How to Use  
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/<your-username>/abcloudops-pub-projects.git
-   cd abcloudops-pub-projects
+   git clone https://github.com/engabelal/ABCloudOps-Pub-Projects.git
+   cd ABCloudOps-Pub-Projects
