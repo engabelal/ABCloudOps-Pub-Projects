@@ -14,3 +14,10 @@
   gather_facts: no              # Skip fact gathering (not required here)
   roles:
     - webserver                 # Apply the "webserver" role
+
+# === Play 3: Install and configure the database server ===
+- name: Install and configure the database
+  hosts: dbservers
+  become: yes
+  roles:
+    - dbserver

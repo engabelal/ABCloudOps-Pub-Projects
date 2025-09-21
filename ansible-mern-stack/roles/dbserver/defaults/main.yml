@@ -1,0 +1,17 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for roles/dbserver
+# overridable defaults
+mongodb_version: "8.0"
+mongodb_repo_key: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
+mongodb_repo_url: "https://repo.mongodb.org/apt/{{ ansible_distribution | lower }}/{{ ansible_distribution_release | lower }}/mongodb-org/{{ mongodb_version }}"
+mongodb_port: 27017
+mongodb_bind_ip: "0.0.0.0"
+mongodb_config_path: "/etc/mongod.conf"
+
+# admin and app users
+mongodb_admin_user: "admin"
+mongodb_admin_password: "ChangeMeStrong"
+mongodb_app_db: "mern_app"
+mongodb_app_user: "mern_user"
+mongodb_app_password: "ChangeMeToo"

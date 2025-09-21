@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for roles/dbserver
+- name: Restart MongoDB
+  ansible.builtin.service:
+    name: mongod
+    state: restarted
+  become: true

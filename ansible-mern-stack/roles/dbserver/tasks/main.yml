@@ -1,0 +1,76 @@
+---
+# tasks file for roles/dbserver
+
+# 1) Install prerequisites
+- name: Install prerequisites
+  become: true
+  ansible.builtin.apt:
+    name:
+      - gnupg              # Needed for apt keys
+      - curl               # Download utilities
+      - ca-certificates    # SSL certificates
+      - lsb-release        # Provides distribution codename
+    state: present
+    update_cache: yes
+
+# 2) Remove broken repo file from previous runs
+- name: Remove bad MongoDB repo file if present
+  become: true
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list"
+    state: absent
+
+# 3) Add MongoDB GPG key
+- name: Add MongoDB GPG key
+  become: true
+  ansible.builtin.apt_key:
+    url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
+    state: present
+
+# 4) Set Ubuntu codename (e.g. jammy, focal)
+- name: Set Ubuntu codename fact
+  become: true
+  ansible.builtin.set_fact:
+    mongo_codename: "{{ (ansible_lsb.codename | default('jammy')) | lower }}"
+
+# 5) Add MongoDB apt repository
+- name: Add MongoDB repo
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64,arm64] https://repo.mongodb.org/apt/ubuntu {{ ansible_lsb.codename | lower }}/mongodb-org/{{ mongodb_version }} multiverse"
+    filename: "mongodb-org-{{ mongodb_version }}"
+    state: present
+    update_cache: yes
+
+# 6) Install MongoDB package
+- name: Install MongoDB
+  become: true
+  ansible.builtin.apt:
+    name: mongodb-org
+    state: present
+    update_cache: yes
+
+# 7) Deploy mongod.conf from template
+- name: Deploy mongod.conf
+  become: true
+  ansible.builtin.template:
+    src: mongod.conf.j2
+    dest: "{{ mongodb_config_path }}"
+    mode: "0644"
+  register: mongod_cfg
+
+# 8) Restart MongoDB if configuration changed
+- name: Restart mongod if needed
+  become: true
+  ansible.builtin.service:
+    name: mongod
+    state: restarted
+  when: mongod_cfg.changed
+
+# 9) Ensure MongoDB service is enabled and running
+- name: Enable and start mongod
+  become: true
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: true
