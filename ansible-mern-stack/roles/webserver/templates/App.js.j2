@@ -1,0 +1,23 @@
+import React from 'react';
+import './App.css';
+
+function App() {
+  return (
+    <div className="app-container">
+      <header>
+        <h1>{{ react_app.title | default("My React App") }}</h1>
+        <p>{{ react_app.message | default("This is a custom React page managed by Ansible!") }}</p>
+      </header>
+
+      <div className="card">
+        <div className="img-container">
+          <img src="/logo192.png" alt="React Logo" />
+        </div>
+        <p>Powered by React & Ansible 🚀</p>
+        <button className="btn">Learn More</button>
+      </div>
+    </div>
+  );
+}
+
+export default App;

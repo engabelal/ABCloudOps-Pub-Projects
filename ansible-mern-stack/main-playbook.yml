@@ -1,7 +1,16 @@
 ---
+# === Play 1: Install common packages on all hosts ===
 - name: Install the common packages
-  become: yes
-  hosts: all
-  gather_facts: yes
+  become: yes                   # Run with sudo to install packages
+  hosts: all                    # Target all hosts in the inventory
+  gather_facts: yes             # Gather facts (needed for package installation)
   roles:
-    - common
+    - common                    # Apply the "common" role
+
+# === Play 2: Install and configure the web server ===
+- name: Install the web server
+  become: yes                   # Run with sudo privileges
+  hosts: webservers             # Target only the [webservers] group
+  gather_facts: no              # Skip fact gathering (not required here)
+  roles:
+    - webserver                 # Apply the "webserver" role

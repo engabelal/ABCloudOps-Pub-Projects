@@ -1,0 +1,19 @@
+# === Application directory where the MERN app will be deployed ===
+app_dir: "/var/www/mern-app"
+
+# === List of required NPM packages to install globally ===
+npm_packages:
+  - express
+  - create-react-app
+  - pm2
+
+# === Application name ===
+app_name: my_app
+
+# === React app configuration ===
+react_app:
+  title: Custom React app
+  message: "This is a sample React app managed by Ansible!"
+
+# === Flag to control deployment of custom React page === ( overrides default in roles/webserver/defaults/main.yml  Do it Manually)
+deploy_custom_page: true

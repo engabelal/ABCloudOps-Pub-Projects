@@ -1,0 +1,64 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/weserver
+# This file contains tasks to set up a web server environment
+# === Install Node.js and NPM ===
+- name: Install Node.js and NPM
+  ansible.builtin.apt:
+    pkg:
+      - nodejs
+      - npm
+    state: present
+
+# === Create the application directory with correct ownership ===
+- name: Create the application directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ users.0.name }}"
+    group: "{{ users.0.group }}"
+    mode: '0755'
+
+# === Install required global NPM packages ===
+- name: Install NPM packages
+  ansible.builtin.npm:
+    name: "{{ item }}"
+    global: yes
+  loop: "{{ npm_packages }}"
+
+# === Initialize a new React project if it does not exist ===
+- name: Initialize a new React project
+  ansible.builtin.command: >
+    npx create-react-app {{ app_name }}
+  args:
+    chdir: "{{ app_dir }}"
+    creates: "{{ app_dir }}/{{ app_name }}"
+
+# === Configure React dev server to listen on all interfaces (0.0.0.0) ===
+- name: Configure React development server to listen on 0.0.0.0
+  ansible.builtin.lineinfile:
+    path: "{{ app_dir }}/{{ app_name }}/.env"   # .env file inside React project
+    line: "HOST=0.0.0.0"                       # Ensures React dev server binds to all IPs
+    create: yes                                # Create .env if it does not exist
+
+# === Deploy custom CSS (App.css) only if enabled ===
+- name: Deploy custom App.css
+  ansible.builtin.copy:
+    src: App.css                               # Local file from role/files
+    dest: "{{ app_dir }}/{{ app_name }}/src/App.css"   # Destination in React app
+    mode: '0644'
+  when: deploy_custom_page                     # Conditional based on variable
+
+# === Deploy custom React component (App.js) only if enabled ===
+- name: Deploy custom App.js
+  ansible.builtin.template:
+    src: App.js.j2
+    dest: "{{ app_dir }}/{{ app_name }}/src/App.js"
+    mode: '0644'
+  when: deploy_custom_page
+
+# === Start the React development server with PM2 ===
+- name: Start the development server (React)
+  ansible.builtin.command:
+    cmd: pm2 start npm -- start --watch        # Start React dev server under PM2
+    chdir: "{{ app_dir }}/{{ app_name }}"      # Run inside the React project directory
