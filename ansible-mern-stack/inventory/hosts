@@ -1,0 +1,13 @@
+[all:vars]
+# Connection settings
+ansible_connection=ssh
+ansible_user=ansibleadmin
+ansible_private_key_file=~/.ssh/id_ed25519
+
+[webservers]
+# Web server node
+webserver01 ansible_host=192.168.2.9
+
+[dbservers]
+# Database server node
+dbserver01 ansible_host=192.168.2.8

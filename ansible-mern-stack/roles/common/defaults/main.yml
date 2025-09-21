@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for roles/common
+
+common_packages:
+  - ntp
+  - git
+  - vim
+  - unzip
+  - curl
