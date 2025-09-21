@@ -17,6 +17,7 @@
     path: "{{ item.key }}"
   loop: "{{ users }}"
   delegate_to: localhost
+  become: false
 
 - name: Add users group
   ansible.builtin.group:
