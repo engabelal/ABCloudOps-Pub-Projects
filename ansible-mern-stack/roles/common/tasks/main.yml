@@ -24,7 +24,7 @@
   become: false
 
 # === Manage groups ===
-- name: Add users group
+- name: Create groups for users
   ansible.builtin.group:
     name: "{{ item.group }}"
     state: "{{ item.state }}"
