@@ -5,9 +5,7 @@ It installs Node.js, scaffolds a React app, optionally templates a custom UI, an
 
 ---
 
-## Result
-
-> Replace the image file with your own screenshot.
+## Final Result Should be
 
 <p align="center">
   <img src="images/web-result.png" alt="Web result" width="900">
