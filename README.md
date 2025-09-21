@@ -19,3 +19,12 @@ It showcases practical implementations in **Infrastructure as Code (IaC)**, **co
    ```bash
    git clone https://github.com/engabelal/ABCloudOps-Pub-Projects.git
    cd ABCloudOps-Pub-Projects
+
+## 📂 Projects  
+
+### 🔹 [ansible-mern-stack](./ansible-mern-stack)  
+
+Automated deployment of a full MERN Stack (MongoDB, Express, React, Node.js) using Ansible.
+	•	Role-based automation (webserver, dbserver, common)
+	•	React app deployment with customization support
+	•	MongoDB installation, user creation, and secure integration
